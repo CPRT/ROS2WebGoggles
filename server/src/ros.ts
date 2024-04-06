@@ -20,6 +20,18 @@ function connectToRos() {
         console.log('Disconnected from ROS');
     });
 
+    function subscribeToTopic(topicName: string) {
+        const listener = new ros.Topic({
+            ros: rosNode,
+            name: topicName,
+            messageType: 'std_msgs/String',
+        });
+
+        listener.subscribe((message) => {
+            console.log(`Received message on ${topicName}: ${(message as any).data}`);
+        });
+    }
+    subscribeToTopic('/chatter');
 }
 
 connectToRos();
