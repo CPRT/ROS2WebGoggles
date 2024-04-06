@@ -1,13 +1,11 @@
 import ros from 'roslib';
-const ROS_SERVER_IP = process.env.ROS_SERVER_IP;
-const ROS_SERVER_URL = `ws://${ROS_SERVER_IP}:9090`;
 function connectToRos() {
     const rosNode = new ros.Ros({
-        url: ROS_SERVER_URL,
+        url: "ws://localhost:9090"
     });
 
     rosNode.on('connection', () => {
-        console.log('Connected to ROS web server at', ROS_SERVER_URL );
+        console.log('Connected to ROS web server');
     });
 
     rosNode.on('error', (error) => {
