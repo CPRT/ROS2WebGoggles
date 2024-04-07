@@ -8,7 +8,7 @@ function App() {
 
   useEffect(() => {
     var io = require('socket.io-client');
-    const socket = io('http://localhost', {
+    const socket = io('http://192.168.2.10', {
       path: '/mysock'
     });
     socket.on("rosMsg", (data: React.SetStateAction<string>) => {
