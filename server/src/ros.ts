@@ -1,4 +1,9 @@
-import ros from 'roslib';
+/* Underlying core for the subscriber system for the rosweb2 app */
+
+
+import ROSLIB, { Message } from 'roslib';
+import { io } from './app';
+ 
 
 var options = {
     transPortlibrary: 'socket.io',
@@ -6,23 +11,46 @@ var options = {
     url: 'ws://192.168.2.10:9090' 
 }
 
-function connectToRos() {
-    const rosNode = new ros.Ros(options);
+class RosNode {
+    private ros: ROSLIB.Ros;
+    private topic!: ROSLIB.Topic;
 
-    rosNode.on('connection', () => {
-        console.log('Connected to ROS web server');
-    });
+    constructor() {
+        this.ros = new ROSLIB.Ros(options);
+        this.connect();
+    };
 
-    rosNode.on('error', (error) => {
-        console.error('Error connecting to ROS', error);
-        console.log('Retrying in 5 seconds...');
-        setTimeout(() => connectToRos(), 5000);
-    });
+    connect() {
+        this.ros.on(('connection'), () => {
+            console.log('Connect to ROS websocket server!')
+        });
+        
+        this.ros.on('error', (error) =>{
+            console.log('Error connecting to ROS websocket server:', error);
+        });
 
-    rosNode.on('close', () => {
-        console.log('Disconnected from ROS');
-    });
+        this.ros.on('close', () => {
+            console.log('ROS websocket server connection closed');
+        });
+    }
 
+    subscribeToTopic(topicName: string, msgType: string){
+        this.topic = new ROSLIB.Topic({
+            ros: this.ros,
+            name: topicName,
+            messageType: msgType
+        })
+        
+        this.topic.subscribe((message) => {
+            console.log('Received messsage from ROS websocket server:', message)
+            io.emit("rosMsg", JSON.stringify(message));
+        })
+
+
+    }
+    
 }
 
-connectToRos();
+// Example for /chatter topic
+const rosNode = new RosNode;
+rosNode.subscribeToTopic('/chatter', '/std_msgs/String');
