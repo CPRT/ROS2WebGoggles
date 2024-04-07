@@ -1,8 +1,13 @@
 import ros from 'roslib';
+
+var options = {
+    transPortlibrary: 'socket.io',
+    // TODO: Change this to the IP address of your ROS robot
+    url: 'ws://192.168.2.10:9090' 
+}
+
 function connectToRos() {
-    const rosNode = new ros.Ros({
-        url: "ws://localhost:9090"
-    });
+    const rosNode = new ros.Ros(options);
 
     rosNode.on('connection', () => {
         console.log('Connected to ROS web server');
