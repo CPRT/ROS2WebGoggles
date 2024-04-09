@@ -1,7 +1,7 @@
 import express from "express";
 import http from 'http';
 import { Server } from 'socket.io';
-import './rosHandler'
+import { topicArray } from './rosHandler';
 
 const app = express();
 const server = http.createServer(app);
@@ -14,4 +14,9 @@ server.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
 
+app.get('/api/topics', (req, res) => {
+    res.send(topicArray);
+}); 
+
 export { io };
+export default app;

@@ -40,4 +40,5 @@ ros.getTopics((topics) => {
     console.log("Here are all the topics available!", topics);
     topicArray = topics;
 });
+
 export {topicArray};
