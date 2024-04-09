@@ -15,7 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/noodlekid/reactapp.git
+   git clone [https://github.com/noodlekid/reactapp.git](https://github.com/CPRT/ROS2WebGoggles.git)
    ```
 
 2. Build the Docker images (Only required for the first time)
