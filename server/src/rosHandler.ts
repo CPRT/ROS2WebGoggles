@@ -7,7 +7,7 @@ import { io } from './app';
 
 var options = {
     transPortlibrary: 'socket.io',
-    url: 'ws://192.168.2.10:9090' 
+    url: 'ws://192.168.55.1:9090' 
 }
 
 const ros = new ROSLIB.Ros(options);
@@ -34,11 +34,10 @@ function subToTopic(topicName: string, msgType: string){
     });
 };
 
-var topicArray: string[] = [];
-ros.getTopics((topics: string[]) => {
+var topicArray : string[] = [];
+// Get all topics available
+ros.getTopics((topics) => {
+    console.log("Here are all the topics available!", topics);
     topicArray = topics;
-    console.log("here are all the topics available!", topicArray);
 });
-
-
-subToTopic('/chatter', '/std_msgs/String');
+export {topicArray};
