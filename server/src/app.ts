@@ -1,22 +1,41 @@
 import express from "express";
 import http from 'http';
-import { Server } from 'socket.io';
-import { topicArray } from './rosHandler';
+import socketIO, { Server as SocketIOServer } from "socket.io";
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-    path: '/mysock',
-  });
-const PORT = process.env.PORT || 3001;
+export class Server {
+    private httpServer!: http.Server;
+    private app!: express.Application;
+    private io!: SocketIOServer;
 
-server.listen(PORT, () => {
-    console.log(`Server listening on ${PORT}`);
-});
+    private readonly DEFAULT_PORT = 3001;
 
-app.get('/api/topics', (req, res) => {
-    res.send(topicArray);
-}); 
+    constructor() {
+        this.initialize();
+        this.handleSocketConnection();
+    }
 
-export { io };
-export default app;
+    private initialize(): void {
+        this.app = express();
+        this.httpServer = http.createServer(this.app);
+        this.io = new SocketIOServer(this.httpServer, {
+            path: '/mysock'
+        });
+    }
+
+    private handleSocketConnection(): void {
+        this.io.on('connection', socket => {
+            console.log('Socket connected.');
+        });
+    }
+
+    public listen(callback: (port: number) => void): void {
+        this.httpServer.listen(this.DEFAULT_PORT, () =>
+          callback(this.DEFAULT_PORT)
+        );
+    }
+
+    public getIO(): SocketIOServer {
+        return this.io;
+    }
+    
+}
