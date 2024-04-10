@@ -4,6 +4,8 @@ services:
       context: ./client
     ports:
       - "80:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   server:
     restart: always
     build:
