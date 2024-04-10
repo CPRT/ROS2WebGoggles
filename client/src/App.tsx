@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     var io = require('socket.io-client');
-    const socket = io('http://192.168.55.1', {
+    const socket = io('http://192.168.2.10', {
       path: '/mysock'
     });
     socket.on("rosMsg", (data: React.SetStateAction<string>) => {
@@ -23,10 +23,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    fetch("http://192.168.55.1/api/topics")
-      .then((res) => res.json())
-      .then((data) => setTopics(data.topics.map((topic: string) => ({ id: topic, name: topic }))));
-  }, []);
+    var io = require('socket.io-client');
+    const socket = io('http://192.168.2.10', {
+      path: '/mysock'
+    });
+  socket.on("imageMsg", (imageData: any) => {
+    setResponse(imageData);
+  });
+},[]);
 
   return (
     <div className="App">
