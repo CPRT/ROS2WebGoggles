@@ -3,11 +3,10 @@
 
 import ROSLIB, { Message } from 'roslib';
 import { io } from './app';
- 
 
 var options = {
     transPortlibrary: 'socket.io',
-    url: 'ws://192.168.55.1:9090' 
+    url: `ws://host.docker.internal:9090` 
 }
 
 const ros = new ROSLIB.Ros(options);
@@ -15,7 +14,8 @@ ros.on('connection', () =>{
     console.log('Connected!');
 });
 ros.on('error', (error) =>{
-    console.error('Uh oh, error!', error);
+    console.error('Uh oh, error connecting:', error);
+    console.log('Tried to connect to:', options.url, "but failed");
 });
 ros.on('close', () =>{
     console.log('Connection to node closed!');
