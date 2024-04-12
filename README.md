@@ -34,3 +34,11 @@ There are no tests for this application yet.
 ## Deployment
 This application is dockerized and can be deployed on any platform that supports Docker.
 
+## TO-DO
+- going to move towards a better developement setup, in terms of npm scripts for faster developement, instead of spinning up a docker conatiner everytime there is a change
+- general front end design plan
+- styling and contributing guide
+- better code orginization
+- moving away from nginx for simplicity (maybe...)
+- implementing webrtc somehow between server and client, as in, no peer to peer, may just end up using some other video streaming protocol like RTSP.
+
