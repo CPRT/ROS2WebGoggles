@@ -1,6 +1,5 @@
 import ROSLIB from "roslib";
-import { Server, Socket } from "socket.io";
-
+import { Server } from "socket.io";
 export class RosHandler {
     
     private readonly options = {   
@@ -8,6 +7,7 @@ export class RosHandler {
         tranPortLibrary: 'socket.io'
     }
     private ros!: ROSLIB.Ros;
+    private topicList!: ROSLIB.Topic[];
 
     constructor(){
         this.initialize();
@@ -27,16 +27,20 @@ export class RosHandler {
         });
     }
 
-    public subAndEmit(topicName: string, msgType: string, io: Server){
-        const topic = new ROSLIB.Topic({
-            ros: this.ros,
-            name: topicName,
-            messageType: msgType
-        });
-
-        topic.subscribe((message) => {
-            io.emit("rosMsg", (message as any).data);
+    public getTopics(): void {
+        this.ros.getTopics((topics) => {
+            console.log('Topics:', topics);
         });
     }
 
+    public subToTopic(topicName: string, messageType: string, io : Server): any {
+        const topic = new ROSLIB.Topic({
+            ros: this.ros,
+            name: topicName,
+            messageType: messageType
+        });
+        topic.subscribe((message) => {
+            io.emit('rosMsg', message);
+        });
+    }
 }
